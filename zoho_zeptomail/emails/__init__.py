@@ -25,9 +25,28 @@ class SendEmail(base.NewAPIClient):
         """
         message["subject"] = subject
 
+    def set_textbody(self, textbody, message):
+        """
+        Sets the plain text body of an email.
+
+        Per ZeptoMail API spec, use 'textbody' for plain text content.
+        """
+        message["textbody"] = textbody
+
+    def set_htmlbody(self, htmlbody, message):
+        """
+        Sets the HTML body of an email.
+
+        Per ZeptoMail API spec, use 'htmlbody' for HTML content.
+        """
+        message["htmlbody"] = htmlbody
+
     def set_body(self, body, message):
         """
-        Appends the 'body' part on an mail
+        Appends the 'body' part on an mail.
+
+        Deprecated: Use set_textbody() and set_htmlbody() instead for
+        proper multipart email handling.
         """
         message["htmlbody"] = body
 
