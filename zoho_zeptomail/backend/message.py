@@ -79,11 +79,15 @@ class ZeptoMailEmailMessage:
         """Private helper method for converting the Django email message
        `body` and `alternatives` and setting it in the internal state.
 
+       Sets textbody and htmlbody separately per ZeptoMail API specification.
+       For EmailMultiAlternatives, the main body is plain text and alternatives
+       contain the HTML version.
+
        Raises:
            :obj:`ValueError`: If the Django email message content subtype is
                not 'plain' or 'html'.
            :obj:`ValueError`: If the Django email message has an alternative
-               of which the content type is not 'text/html'.
+               of which the content type is not 'text/html' or 'text/plain'.
        """
 
         # Make sure the main content type is supported
@@ -103,13 +107,11 @@ class ZeptoMailEmailMessage:
                 else:
                     raise ValueError('Content type not supported')
 
-        # Set the mail content
-        content['body'] =''
+        # Set textbody and htmlbody separately per ZeptoMail API spec
         if 'text/plain' in content:
-            content['body'] += content['text/plain'] +"\n"
+            self.__Zoho_ZeptoMail.set_textbody(content['text/plain'], self.__email_data)
         if 'text/html' in content:
-            content['body'] += content['text/html']
-        self.__Zoho_ZeptoMail.set_body(content['body'], self.__email_data)
+            self.__Zoho_ZeptoMail.set_htmlbody(content['text/html'], self.__email_data)
 
     def __set_mail_from(self):
         """Private helper method for converting the Django email message
