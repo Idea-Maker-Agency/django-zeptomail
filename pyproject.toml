@@ -21,3 +21,6 @@ dependencies = [
   "django",
   "requests"
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["zoho_zeptomail"]
